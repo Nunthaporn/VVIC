@@ -272,8 +272,7 @@ export const lineOption = (
 
 export const factoryOption = (d: Factory[], products: FactoryProduct[], selected: { month: string; factory: string | null } | null): EChartsOption => {
   const months = [...new Set(d.map(x => x.month))]
-    .sort()
-    .slice(-4);
+    .sort();
 
   const fs = Object.keys(colors);
   const rank = new Map<string, number>();

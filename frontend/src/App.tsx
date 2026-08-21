@@ -663,64 +663,58 @@ function App() {
           {/* START DATE */}
 
           <label>
-
             START DATE
 
             <input
               type="date"
+              min="2023-01-01"
+              max={f.end_date}
+              value={f.start_date}
+              onChange={e => {
+                const value = e.target.value;
 
-              min="2023-09-01"
+                // ล้าง selection จากการคลิกกราฟ
+                // เพื่อให้ Date Filter เป็นตัวหลัก
+                setCross({
+                  month: null,
+                  factory: null,
+                  customer: null,
+                });
 
-              max={
-                f.end_date
-              }
-
-              value={
-                f.start_date
-              }
-
-              onChange={e =>
                 setF(v => ({
                   ...v,
-
-                  start_date:
-                    e.target.value,
-                }))
-              }
+                  start_date: value,
+                }));
+              }}
             />
-
           </label>
 
 
           {/* END DATE */}
 
           <label>
-
             END DATE
 
             <input
               type="date"
+              min={f.start_date}
+              value={f.end_date}
+              onChange={e => {
+                const value = e.target.value;
 
-              min={
-                f.start_date
-              }
+                // ล้าง selection เดิมจากกราฟ
+                setCross({
+                  month: null,
+                  factory: null,
+                  customer: null,
+                });
 
-              max="2026-08-19"
-
-              value={
-                f.end_date
-              }
-
-              onChange={e =>
                 setF(v => ({
                   ...v,
-
-                  end_date:
-                    e.target.value,
-                }))
-              }
+                  end_date: value,
+                }));
+              }}
             />
-
           </label>
 
 
