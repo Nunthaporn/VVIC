@@ -323,12 +323,259 @@ export const factoryOption = (d: Factory[], products: FactoryProduct[], selected
   }, xAxis: { type: "category", data: months, boundaryGap: true, axisTick: { show: false }, axisLine: { show: false } }, yAxis: { type: "value", show: false, min: -.5, max: 5.5, interval: 1 }, series: series as any };
   };
 
-export const customerOption = (d: Customer[], factoryRows: CustomerFactory[], target: number, selectedCustomer: string | null): EChartsOption => ({
-  tooltip: { trigger: "item", confine: true, backgroundColor: "#fff", borderColor: "#aeb8c6", borderWidth: 1, padding: 0, extraCssText: "box-shadow:0 8px 24px rgba(20,35,60,.22);border-radius:3px;", formatter: (x: any) => {
-    const brand = String(x?.name ?? ""), base = d[x.dataIndex];
-    const rows = factoryRows.filter(r => r.customer === brand && r.eff_pct != null).sort((a,b) => (b.eff_pct ?? 0)-(a.eff_pct ?? 0));
-    const bars = rows.map(r => `<div style="display:grid;grid-template-columns:34px 150px 42px;gap:8px;align-items:center;margin-top:9px"><span style="font-size:10px;color:#5f6878">${esc(r.factory)}</span><span style="height:28px;background:${colors[r.factory] ?? '#48bc67'};border-radius:2px"></span><b style="font-size:11px;color:#263145">${pct(r.eff_pct)}</b></div>`).join("");
-    return `<div style="padding:12px 14px;min-width:270px"><div style="font-size:12px;font-weight:700;color:#263145">EFF% by FACTORY</div><div style="font-size:10px;color:#748196;margin-top:3px">${esc(brand)} · ${esc(base?.month ?? '')}</div>${bars || '<div style="margin-top:10px;color:#748196;font-size:11px">No Factory data</div>'}</div>`;
-  } }, grid: { left: 175, right: 58, top: 28, bottom: 35 }, xAxis: { type: "value", min: 0, max: 1, axisLabel: { formatter: (v: number) => `${v * 100}%` }, splitLine: { lineStyle: { type: "dashed" } } }, yAxis: { type: "category", inverse: true, data: d.map(x => x.customer), axisTick: { show: false } }, dataZoom: d.length > 8 ? [{ type: "slider", yAxisIndex: 0, right: 3, width: 10 }] : [],
-  series: [{ type: "bar", barWidth: 22, data: d.map(x => ({ value: x.eff_pct, itemStyle: { color: (x.eff_pct ?? 0) >= target ? "#23df7a" : "#df8396", borderRadius: [0, 5, 5, 0], opacity: fade(x.customer === selectedCustomer, !!selectedCustomer) } })), label: { show: true, position: "right", formatter: (x: any) => pct(x.value), fontWeight: "bold" }, markLine: { symbol: "none", lineStyle: { color: "#7ba4ec", type: "dashed", width: 2 }, label: { formatter: `Target: ${pct(target)}` }, data: [{ xAxis: target }] } }],
+export const customerOption = (
+  d: Customer[],
+  factoryRows: CustomerFactory[],
+  target: number,
+  selectedCustomer: string | null
+): EChartsOption => ({
+  tooltip: {
+    trigger: "item",
+    confine: true,
+    backgroundColor: "#fff",
+    borderColor: "#aeb8c6",
+    borderWidth: 1,
+    padding: 0,
+    extraCssText:
+      "box-shadow:0 8px 24px rgba(20,35,60,.22);border-radius:3px;",
+
+    formatter: (x: any) => {
+      const brand = String(x?.name ?? "");
+
+      const base = d.find(
+        item => item.customer === brand
+      );
+
+      const rows = factoryRows
+        .filter(
+          r =>
+            r.customer === brand &&
+            r.eff_pct != null
+        )
+        .sort(
+          (a, b) =>
+            (b.eff_pct ?? 0) -
+            (a.eff_pct ?? 0)
+        );
+
+      const bars = rows
+        .map(
+          r => `
+            <div
+              style="
+                display:grid;
+                grid-template-columns:60px 150px 48px;
+                gap:8px;
+                align-items:center;
+                margin-top:9px
+              "
+            >
+              <span
+                style="
+                  font-size:10px;
+                  color:#5f6878
+                "
+              >
+                ${esc(r.factory)}
+              </span>
+
+              <span
+                style="
+                  height:20px;
+                  background:${colors[r.factory] ?? "#48bc67"};
+                  border-radius:3px
+                "
+              ></span>
+
+              <b
+                style="
+                  font-size:11px;
+                  color:#263145;
+                  text-align:right
+                "
+              >
+                ${pct(r.eff_pct)}
+              </b>
+            </div>
+          `
+        )
+        .join("");
+
+      return `
+        <div
+          style="
+            padding:12px 14px;
+            min-width:300px
+          "
+        >
+          <div
+            style="
+              font-size:12px;
+              font-weight:700;
+              color:#263145
+            "
+          >
+            EFF% by FACTORY
+          </div>
+
+          <div
+            style="
+              font-size:10px;
+              color:#748196;
+              margin-top:3px
+            "
+          >
+            ${esc(brand)} · ${esc(base?.month ?? "")}
+          </div>
+
+          ${
+            bars ||
+            `
+              <div
+                style="
+                  margin-top:10px;
+                  color:#748196;
+                  font-size:11px
+                "
+              >
+                No Factory data
+              </div>
+            `
+          }
+        </div>
+      `;
+    },
+  },
+
+  grid: {
+    left: 175,
+    right: 75,
+    top: 25,
+    bottom: 40,
+  },
+
+  xAxis: {
+    type: "value",
+    min: 0,
+    max: 1,
+
+    axisLabel: {
+      formatter: (v: number) =>
+        `${Math.round(v * 100)}%`,
+    },
+
+    splitLine: {
+      lineStyle: {
+        type: "dashed",
+        color: "#d9e4f2",
+      },
+    },
+
+    axisLine: {
+      show: false,
+    },
+
+    axisTick: {
+      show: false,
+    },
+  },
+
+  yAxis: {
+    type: "category",
+    inverse: true,
+
+    data: d.map(
+      x => x.customer
+    ),
+
+    axisTick: {
+      show: false,
+    },
+
+    axisLine: {
+      show: false,
+    },
+
+    axisLabel: {
+      fontSize: 11,
+      margin: 12,
+      width: 150,
+      overflow: "truncate",
+    },
+  },
+
+  series: [
+    {
+      type: "bar",
+
+      barWidth: 20,
+
+      data: d.map(x => ({
+        name: x.customer,
+        value: x.eff_pct,
+
+        itemStyle: {
+          color:
+            (x.eff_pct ?? 0) >= target
+              ? "#23df7a"
+              : "#df8396",
+
+          borderRadius: [
+            0,
+            5,
+            5,
+            0,
+          ],
+
+          opacity: fade(
+            x.customer === selectedCustomer,
+            !!selectedCustomer
+          ),
+        },
+      })),
+
+      label: {
+        show: true,
+        position: "right",
+
+        formatter: (x: any) => {
+          if (x.value == null) {
+            return "";
+          }
+
+          return pct(
+            Number(x.value)
+          );
+        },
+
+        fontWeight: "bold",
+        fontSize: 10,
+        distance: 8,
+      },
+
+      markLine: {
+        symbol: "none",
+        silent: true,
+
+        lineStyle: {
+          color: "#7ba4ec",
+          type: "dashed",
+          width: 2,
+        },
+
+        label: {
+          formatter:
+            `Target: ${pct(target)}`,
+
+          position: "end",
+        },
+
+        data: [
+          {
+            xAxis: target,
+          },
+        ],
+      },
+    },
+  ],
 });

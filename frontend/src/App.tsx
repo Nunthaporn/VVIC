@@ -52,8 +52,8 @@ function App() {
   // =========================================================
 
   const defaults: Filters = {
-    start_date: "2023-09-01",
-    end_date: "2026-08-19",
+    start_date: "2026-01-01",
+    end_date: "2026-12-31",
     customer_type: "VVIC",
     factory: [],
     customer: null,
@@ -667,8 +667,6 @@ function App() {
 
             <input
               type="date"
-              min="2023-01-01"
-              max={f.end_date}
               value={f.start_date}
               onChange={e => {
                 const value = e.target.value;
@@ -697,7 +695,6 @@ function App() {
 
             <input
               type="date"
-              min={f.start_date}
               value={f.end_date}
               onChange={e => {
                 const value = e.target.value;
@@ -1260,43 +1257,56 @@ function App() {
                     )
 
                     : (
-                      <ReactECharts
+                      <div
+                        style={{
+                          height: 360,
+                          overflowY: "auto",
+                          overflowX: "hidden",
+                          paddingRight: 4,
+                        }}
+                      >
+                        <ReactECharts
 
-                        option={
-                          customerOption(
-                            customers,
-                            customerFactories,
-                            target,
-                            cross.customer
-                          )
-                        }
+                          option={
+                            customerOption(
+                              customers,
+                              customerFactories,
+                              target,
+                              cross.customer
+                            )
+                          }
 
-                        onEvents={{
+                          onEvents={{
 
-                          click:
-                            (p: any) => {
+                            click:
+                              (p: any) => {
 
-                              if (
-                                p?.name
-                              ) {
+                                if (
+                                  p?.name
+                                ) {
 
-                                toggleCustomer(
-                                  String(
-                                    p.name
-                                  )
-                                );
+                                  toggleCustomer(
+                                    String(
+                                      p.name
+                                    )
+                                  );
+
+                                }
 
                               }
 
-                            }
+                          }}
 
-                        }}
+                          style={{
+                            height: Math.max(
+                              360,
+                              customers.length * 44
+                            ),
+                            width: "100%",
+                          }}
 
-                        style={{
-                          height: 310,
-                        }}
-
-                      />
+                        />
+                      </div>
                     )
               }
 
