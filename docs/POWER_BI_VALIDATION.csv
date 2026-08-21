@@ -1,0 +1,8 @@
+Measure Name,Power BI Result,Web Application Result,Difference,Pass/Fail,หมายเหตุ
+YTD EFF%,,,,Pending,กรอกค่าจาก Power BI ด้วย filter เดียวกัน
+QTD EFF%,,,,Pending,Tolerance <= 0.0001
+MTD EFF%,,,,Pending,Tolerance <= 0.0001
+Monthly VVIC EFF%,,,,Pending,ตรวจทุก Year Month
+Monthly NON-VVIC EFF%,,,,Pending,ตรวจเดือนที่ไม่มีข้อมูล
+Factory Monthly EFF%,,,,Pending,ตรวจ G1-G4 TRM EA
+Customer MTD EFF%,,,,Pending,ตรวจลำดับและ Target 60%
