@@ -548,10 +548,10 @@ function App() {
   // =========================================================
 
   const filterLabel =
-    `${f.customer_type}` +
+    // `${f.customer_type}` +
 
-    ` · ${f.factory[0] ||
-      "ALL FACTORIES"}` +
+    // ` · ${f.factory[0] ||
+    //   "ALL FACTORIES"}` +
 
     (
       cross.month
@@ -599,11 +599,11 @@ function App() {
 
           <div>
 
-            <span
+            {/* <span
               className="eyebrow"
             >
               OPERATIONS INTELLIGENCE
-            </span>
+            </span> */}
 
             <h1>
               VVIC CUSTOMER
@@ -805,14 +805,14 @@ function App() {
             className="dot"
           />
 
-          DATA AS OF
+          {/* DATA AS OF */}
 
-          <b>
+          {/* <b>
             {
               summary?.data_as_of
               ?? "N/A"
             }
-          </b>
+          </b> */}
 
 
           <i />
